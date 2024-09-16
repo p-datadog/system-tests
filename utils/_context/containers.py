@@ -172,7 +172,8 @@ class TestedContainer:
         self._fix_host_pwd_in_volumes()
 
         logger.info(f"Start container {self.container_name}")
-
+        
+        print(self.environment)
         self._container = _get_client().containers.run(
             image=self.image.name,
             name=self.container_name,
