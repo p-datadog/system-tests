@@ -9,3 +9,5 @@ if defined?(Datadog::Tracing)
 else
   Datadog.tracer.trace('init.service') { }
 end
+
+# init remote config here
