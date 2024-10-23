@@ -571,6 +571,7 @@ class scenarios:
         "DEBUGGER_PII_REDACTION",
         rc_api_enabled=True,
         weblog_env={
+            'RAILS_LOG_TO_STDOUT':'1',
             "DD_DYNAMIC_INSTRUMENTATION_ENABLED": "1",
             "DD_REMOTE_CONFIG_ENABLED": "true",
             "DD_DYNAMIC_INSTRUMENTATION_REDACTED_TYPES": "weblog.Models.Debugger.CustomPii,com.datadoghq.system_tests.springboot.CustomPii,CustomPii",
