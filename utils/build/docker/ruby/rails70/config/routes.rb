@@ -47,4 +47,7 @@ Rails.application.routes.draw do
 
   get '/requestdownstream' => 'system_test#request_downstream'
   get '/returnheaders' => 'system_test#return_headers'
+
+  get '/debugger/init' => 'debugger#init'
+  get '/debugger/pii' => 'debugger#pii'
 end
