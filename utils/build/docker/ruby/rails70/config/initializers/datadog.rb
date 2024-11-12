@@ -11,3 +11,5 @@ else
 end
 
 # init remote config here
+
+puts '-------- DATADOG INITIALIZED -----------------'
