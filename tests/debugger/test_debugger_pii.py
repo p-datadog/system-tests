@@ -123,7 +123,9 @@ def filter(keys_to_filter):
 class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
     def _setup(self):
 
-        self.weblog_responses = [weblog.get("/debugger/pii")]
+        self.weblog_responses = [weblog.get("/debugger/init")]
+        print(self.weblog_responses[0].text)
+        print('initialized')
         
         probes = base.read_probes("pii")
         self.expected_probe_ids = base.extract_probe_ids(probes)

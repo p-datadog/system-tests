@@ -4,7 +4,7 @@
 
 import tests.debugger.utils as base
 
-from utils import scenarios, features, remote_config as rc, bug, context
+from utils import weblog, scenarios, features, remote_config as rc, bug, context
 
 
 @features.debugger
@@ -14,6 +14,10 @@ class Test_Debugger_Probe_Statuses(base._Base_Debugger_Test):
     expected_status_map = {}
 
     def _setup(self, probes):
+        self.weblog_responses = [weblog.get("/debugger/init")]
+        print(self.weblog_responses[0].text)
+        print('initialized')
+        
         Test_Debugger_Probe_Statuses.version += 1
         self.rc_state = rc.send_debugger_command(probes=probes, version=Test_Debugger_Probe_Statuses.version)
 
