@@ -231,6 +231,7 @@ def build_debugger_command(probes: list, version: int):
                     probe["where"]["methodName"] = re.sub(
                         r"([a-z])([A-Z])", r"\1_\2", probe["where"]["methodName"]
                     ).lower()
+                    print(probe)
             elif probe["where"]["sourceFile"] == "ACTUAL_SOURCE_FILE":
                 if library_name == "dotnet":
                     probe["where"]["sourceFile"] = "DebuggerController.cs"
