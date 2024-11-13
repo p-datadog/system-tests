@@ -74,8 +74,8 @@ class Test_Debugger_Method_Probe_Snaphots(base._Base_Debugger_Test):
 @features.debugger
 @scenarios.debugger_line_probes_snapshot
 class Test_Debugger_Line_Probe_Snaphots(base._Base_Debugger_Test):
-    def setup_line_probe_snaphots(self):
-        probes = base.read_probes("probe_snapshot_line")
+    def setup_log_line_probe_snaphots(self):
+        probes = base.read_probes("probe_snapshot_log_line")
         self.expected_probe_ids = base.extract_probe_ids(probes)
         self.rc_state = rc.send_debugger_command(probes, version=1)
 
@@ -83,18 +83,35 @@ class Test_Debugger_Line_Probe_Snaphots(base._Base_Debugger_Test):
 
         self.weblog_responses = [
             weblog.get("/debugger/log"),
-            weblog.get("/debugger/span-decoration/asd/1"),
         ]
 
-    def test_line_probe_snaphots(self):
+    def test_log_line_probe_snaphots(self):
         self.assert_all_states_not_error()
         self.assert_all_probes_are_installed()
         self.assert_all_weblog_responses_ok()
 
         expected_snapshots = ["log170aa-acda-4453-9111-1478a697line"]
-        expected_spans = ["decor0aa-acda-4453-9111-1478a697line"]
 
         _validate_snapshots(expected_snapshots)
+
+    def setup_span_decoration_line_probe_snaphots(self):
+        probes = base.read_probes("probe_snapshot_span_decoration_line")
+        self.expected_probe_ids = base.extract_probe_ids(probes)
+        self.rc_state = rc.send_debugger_command(probes, version=1)
+
+        interfaces.agent.wait_for(self.wait_for_all_probes_installed, timeout=30)
+
+        self.weblog_responses = [
+            weblog.get("/debugger/span-decoration/asd/1"),
+        ]
+
+    def test_span_decoration_line_probe_snaphots(self):
+        self.assert_all_states_not_error()
+        self.assert_all_probes_are_installed()
+        self.assert_all_weblog_responses_ok()
+
+        expected_spans = ["decor0aa-acda-4453-9111-1478a697line"]
+
         _validate_spans(expected_spans)
 
 
