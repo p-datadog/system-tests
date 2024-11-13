@@ -10,16 +10,14 @@ from utils import scenarios, interfaces, weblog, features, remote_config as rc, 
 @features.debugger
 @scenarios.debugger_method_probes_snapshot
 class Test_Debugger_Method_Probe_Snaphots(base._Base_Debugger_Test):
-    def setup_method_probe_snaphots(self):
-        probes = base.read_probes("probe_snapshot_method")
+    def setup_log_method_probe_snaphots(self):
+        probes = base.read_probes("probe_snapshot_log_method")
         self.expected_probe_ids = base.extract_probe_ids(probes)
         self.rc_state = rc.send_debugger_command(probes, version=1)
 
         interfaces.agent.wait_for(self.wait_for_all_probes_installed, timeout=30)
         self.weblog_responses = [
             weblog.get("/debugger/log"),
-            weblog.get("/debugger/span"),
-            weblog.get("/debugger/span-decoration/asd/1"),
         ]
 
     @bug(library="python", reason="DEBUG-2708, DEBUG-2709")
@@ -29,9 +27,47 @@ class Test_Debugger_Method_Probe_Snaphots(base._Base_Debugger_Test):
         self.assert_all_weblog_responses_ok()
 
         expected_snapshots = ["log170aa-acda-4453-9111-1478a6method"]
-        expected_spans = ["span70aa-acda-4453-9111-1478a6method", "decor0aa-acda-4453-9111-1478a6method"]
 
         _validate_snapshots(expected_snapshots)
+
+    def setup_span_method_probe_snaphots(self):
+        probes = base.read_probes("probe_snapshot_method")
+        self.expected_probe_ids = base.extract_probe_ids(probes)
+        self.rc_state = rc.send_debugger_command(probes, version=1)
+
+        interfaces.agent.wait_for(self.wait_for_all_probes_installed, timeout=30)
+        self.weblog_responses = [
+            weblog.get("/debugger/span"),
+        ]
+
+    @bug(library="python", reason="DEBUG-2708, DEBUG-2709")
+    def test_span_method_probe_snaphots(self):
+        self.assert_all_states_not_error()
+        self.assert_all_probes_are_installed()
+        self.assert_all_weblog_responses_ok()
+
+        expected_spans = ["span70aa-acda-4453-9111-1478a6method"]
+
+        _validate_spans(expected_spans)
+
+    def setup_span_decoration_method_probe_snaphots(self):
+        probes = base.read_probes("probe_snapshot_method")
+        self.expected_probe_ids = base.extract_probe_ids(probes)
+        self.rc_state = rc.send_debugger_command(probes, version=1)
+
+        interfaces.agent.wait_for(self.wait_for_all_probes_installed, timeout=30)
+        self.weblog_responses = [
+            weblog.get("/debugger/span-decoration/asd/1"),
+        ]
+
+    @bug(library="python", reason="DEBUG-2708, DEBUG-2709")
+    def test_span_decoration_method_probe_snaphots(self):
+        self.assert_all_states_not_error()
+        self.assert_all_probes_are_installed()
+        self.assert_all_weblog_responses_ok()
+
+        expected_spans = ["decor0aa-acda-4453-9111-1478a6method"]
+
         _validate_spans(expected_spans)
 
 
