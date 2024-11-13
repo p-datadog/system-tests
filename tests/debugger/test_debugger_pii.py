@@ -131,6 +131,17 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
         interfaces.agent.wait_for(self.wait_for_all_probes_installed, timeout=30)
 
         self.weblog_responses = [weblog.get("/debugger/pii")]
+        
+    def _setup_line(self):
+        self.initialize_weblog_remote_config()
+        
+        probes = base.read_probes("pii_line")
+        self.expected_probe_ids = base.extract_probe_ids(probes)
+        self.rc_state = rc.send_debugger_command(probes, version=1)
+
+        interfaces.agent.wait_for(self.wait_for_all_probes_installed, timeout=30)
+
+        self.weblog_responses = [weblog.get("/debugger/pii")]
 
     def _test(self, redacted_keys, redacted_types):
         self.assert_all_states_not_error()
@@ -147,6 +158,7 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
     @missing_feature(context.library < "dotnet@2.51", reason="keywords are not fully redacted")
     @bug(context.library == "python@2.16.0", reason="DEBUG-3127")
     @bug(context.library == "python@2.16.1", reason="DEBUG-3127")
+    @missing_feature(context.library == 'ruby', reason='Local variable capture not implemented for method probes')
     def test_pii_redaction_full(self):
         self._test(REDACTED_KEYS, REDACTED_TYPES)
 
@@ -154,6 +166,7 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
         self._setup()
 
     @irrelevant(context.library != "java@1.33", reason="not relevant for other version")
+    @missing_feature(context.library == 'ruby', reason='Local variable capture not implemented for method probes')
     def test_pii_redaction_java_1_33(self):
         self._test(
             filter(
@@ -178,8 +191,16 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
     @bug(
         context.weblog_variant == "uds" and context.library == "dotnet@2.50.0", reason="APMRP-360",
     )  # bug with UDS protocol on this version
+    @missing_feature(context.library == 'ruby', reason='Local variable capture not implemented for method probes')
     def test_pii_redaction_dotnet_2_50(self):
         self._test(filter(["applicationkey", "connectionstring"]), REDACTED_TYPES)
+
+    def setup_pii_redaction_line(self):
+        self._setup_line()
+        
+    @irrelevant(context.library != 'ruby', reason='Ruby needs to use line probes to capture variables')
+    def test_pii_redaction_line(self):
+        pass
 
     def _validate_pii_keyword_redaction(self, should_redact_field_names):
         agent_logs_endpoint_requests = list(interfaces.agent.get_data(path_filters="/api/v2/logs"))
