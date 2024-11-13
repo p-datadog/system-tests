@@ -204,6 +204,7 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
                     snapshot = item.get("debugger", {}).get("snapshot") or item.get("debugger.snapshot")
 
                     if snapshot:
+                        import pprint;pprint.pp(snapshot)
                         for field_name in should_redact_field_names:
                             fields = snapshot["captures"]["return"]["locals"]["pii"]["fields"]
 
