@@ -2,7 +2,6 @@
 # Padding
 # Padding
 # Padding
-# Padding
 
 class DebuggerController < ActionController::Base
   def init
@@ -17,7 +16,7 @@ class DebuggerController < ActionController::Base
     render inline: 'pii'
   end
   
-  def log
+  def log_probe
     render inline: 'Log probe' # This needs to be line 20
   end
 end
