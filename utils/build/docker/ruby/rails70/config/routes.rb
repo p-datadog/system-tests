@@ -50,4 +50,5 @@ Rails.application.routes.draw do
 
   get '/debugger/init' => 'debugger#init'
   get '/debugger/pii' => 'debugger#pii'
+  get '/debugger/log' => 'debugger#log_probe'
 end
