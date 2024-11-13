@@ -4,9 +4,10 @@
         "pii": "",
         "id": "log170aa-acda-4453-9111-1478a600line",
         "where": {
-            "sourceFile": "ACTUAL_SOURCE_FILE",
+           "typeName": null,
+           "sourceFile": "ACTUAL_SOURCE_FILE",
             "lines": [
-                "20"
+                "26"
             ]
         },
         "captureSnapshot": true,

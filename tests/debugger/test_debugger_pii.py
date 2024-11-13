@@ -200,7 +200,7 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
         
     @irrelevant(context.library != 'ruby', reason='Ruby needs to use line probes to capture variables')
     def test_pii_redaction_line(self):
-        pass
+        self._test(REDACTED_KEYS, REDACTED_TYPES)
 
     def _validate_pii_keyword_redaction(self, should_redact_field_names):
         agent_logs_endpoint_requests = list(interfaces.agent.get_data(path_filters="/api/v2/logs"))
