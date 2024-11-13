@@ -121,21 +121,10 @@ def filter(keys_to_filter):
 @features.debugger_pii_redaction
 @scenarios.debugger_pii_redaction
 class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
-    def _setup(self):
+    def _setup(self, probes_file='pii'):
         self.initialize_weblog_remote_config()
         
-        probes = base.read_probes("pii")
-        self.expected_probe_ids = base.extract_probe_ids(probes)
-        self.rc_state = rc.send_debugger_command(probes, version=1)
-
-        interfaces.agent.wait_for(self.wait_for_all_probes_installed, timeout=30)
-
-        self.weblog_responses = [weblog.get("/debugger/pii")]
-        
-    def _setup_line(self):
-        self.initialize_weblog_remote_config()
-        
-        probes = base.read_probes("pii_line")
+        probes = base.read_probes(probes_file)
         self.expected_probe_ids = base.extract_probe_ids(probes)
         self.rc_state = rc.send_debugger_command(probes, version=1)
 
@@ -196,7 +185,7 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
         self._test(filter(["applicationkey", "connectionstring"]), REDACTED_TYPES)
 
     def setup_pii_redaction_line(self):
-        self._setup_line()
+        self._setup(probes_file='pii_line')
         
     @irrelevant(context.library != 'ruby', reason='Ruby needs to use line probes to capture variables')
     def test_pii_redaction_line(self):
