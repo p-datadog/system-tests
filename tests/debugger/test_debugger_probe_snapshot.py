@@ -43,6 +43,7 @@ class Test_Debugger_Method_Probe_Snaphots(base._Base_Debugger_Test):
         ]
 
     @bug(library="python", reason="DEBUG-2708, DEBUG-2709")
+    @missing_feature(context.library == 'ruby', reason='Not yet implemented')
     def test_span_method_probe_snaphots(self):
         self.assert_all_states_not_error()
         self.assert_all_probes_are_installed()
@@ -63,6 +64,7 @@ class Test_Debugger_Method_Probe_Snaphots(base._Base_Debugger_Test):
         ]
 
     @bug(library="python", reason="DEBUG-2708, DEBUG-2709")
+    @missing_feature(context.library == 'ruby', reason='Not yet implemented')
     def test_span_decoration_method_probe_snaphots(self):
         self.assert_all_states_not_error()
         self.assert_all_probes_are_installed()
