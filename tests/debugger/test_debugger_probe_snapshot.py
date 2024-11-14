@@ -4,7 +4,7 @@
 
 import tests.debugger.utils as base
 
-from utils import scenarios, interfaces, weblog, features, remote_config as rc, bug, missing_feature
+from utils import scenarios, interfaces, weblog, features, remote_config as rc, bug, missing_feature, context
 
 
 @features.debugger
