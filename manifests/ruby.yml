@@ -294,8 +294,8 @@ tests/:
       Test_Debugger_PII_Redaction: v1.0
     test_debugger_probe_snapshot.py:
       Test_Debugger_Line_Probe_Snaphots: v1.0
-      Test_Debugger_Method_Probe_Snaphots: missing_feature (feature not implemented)
-      Test_Debugger_Mix_Log_Probe: missing_feature (feature not implemented)
+      Test_Debugger_Method_Probe_Snaphots: v1.0
+      Test_Debugger_Mix_Log_Probe: v1.0
     test_debugger_probe_status.py:
       Test_Debugger_Probe_Statuses: v1.0
   integrations/:
