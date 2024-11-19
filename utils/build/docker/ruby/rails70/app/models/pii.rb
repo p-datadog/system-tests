@@ -100,7 +100,7 @@ REDACTED_TYPES = ["customPii"]
 
 VALUE = "SHOULD_BE_REDACTED"
 
-class Pii
+class Pii < BasePii
   def initialize
     REDACTED_KEYS.each do |key|
       instance_variable_set("@#{key}", VALUE)

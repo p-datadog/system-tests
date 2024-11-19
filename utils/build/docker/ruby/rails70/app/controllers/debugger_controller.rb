@@ -28,6 +28,8 @@ class DebuggerController < ActionController::Base
   def pii
     pii = Pii.new
     customPii = CustomPii.new
-    render inline: 'pii' # This needs to be line 31
+    value = pii.test_value
+    custom_value = customPii.test_value
+    render inline: "PII #{value}. CustomPII #{custom_value}" # must be line 33
   end
 end
