@@ -1,7 +1,7 @@
 class BasePii
   def initialize
-    @custom_value = 'should be redacted'
+    @test_value = 'should be redacted'
   end
-  
-  attr_reader :custom_value
+
+  attr_reader :test_value
 end
