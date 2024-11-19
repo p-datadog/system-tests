@@ -20,9 +20,14 @@ class DebuggerController < ActionController::Base
     render inline: 'Log probe' # This needs to be line 20
   end
 
+  # Padding
+  # Padding
+  # Padding
+  # Padding
+
   def pii
-    puts '---- DEBUGGER PII----'
-    var = 1
-    render inline: 'pii' # This needs to be line 26
+    pii = Pii.new
+    customPii = CustomPii.new
+    render inline: 'pii' # This needs to be line 31
   end
 end
