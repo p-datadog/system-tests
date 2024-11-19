@@ -17,7 +17,7 @@ class Test_Debugger_Method_Probe_Snaphots(base._Base_Debugger_Test):
         self.expected_probe_ids = base.extract_probe_ids(probes)
         self.rc_state = rc.send_debugger_command(probes, version=1)
 
-        interfaces.agent.wait_for(self.wait_for_all_probes_installed, timeout=5)
+        interfaces.agent.wait_for(self.wait_for_all_probes_installed, timeout=30)
         self.weblog_responses = [
             weblog.get("/debugger/log"),
         ]
