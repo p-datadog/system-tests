@@ -10,7 +10,7 @@ from utils import scenarios, interfaces, weblog, features, remote_config as rc, 
 @features.debugger
 @scenarios.debugger_method_probes_snapshot
 class Test_Debugger_Method_Probe_Snaphots(base._Base_Debugger_Test):
-    def setup_method_probe_snaphots(self):
+    def setup_log_method_probe_snaphots(self):
         self.initialize_weblog_remote_config()
         
         probes = base.read_probes("probe_snapshot_log_method")
