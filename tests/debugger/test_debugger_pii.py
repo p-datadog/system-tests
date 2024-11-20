@@ -121,7 +121,7 @@ def filter(keys_to_filter):
 @features.debugger_pii_redaction
 @scenarios.debugger_pii_redaction
 class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
-    def _setup(self, probes_file='pii'):
+    def _setup(self, probes_file):
         self.initialize_weblog_remote_config()
         
         probes = base.read_probes(probes_file)
@@ -141,21 +141,22 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
         self._validate_pii_type_redaction(redacted_types)
 
     def setup_pii_redaction_full(self):
-        self._setup()
+        self._setup('pii')
 
     @missing_feature(context.library < "java@1.34", reason="keywords are not fully redacted")
     @missing_feature(context.library < "dotnet@2.51", reason="keywords are not fully redacted")
     @bug(context.library == "python@2.16.0", reason="DEBUG-3127")
     @bug(context.library == "python@2.16.1", reason="DEBUG-3127")
-    @missing_feature(context.library == 'ruby', reason='Local variable capture not implemented for method probes')
+    # Ruby requires @irrelevant rather than @missing_feature to skip setup
+    # for this test (which will interfere with the line probe test).
+    @irrelevant(context.library == 'ruby', reason='Local variable capture not implemented for method probes')
     def test_pii_redaction_full(self):
         self._test(REDACTED_KEYS, REDACTED_TYPES)
 
     def setup_pii_redaction_java_1_33(self):
-        self._setup()
+        self._setup('pii')
 
     @irrelevant(context.library != "java@1.33", reason="not relevant for other version")
-    @missing_feature(context.library == 'ruby', reason='Local variable capture not implemented for method probes')
     def test_pii_redaction_java_1_33(self):
         self._test(
             filter(
@@ -174,18 +175,17 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
         )
 
     def setup_pii_redaction_dotnet_2_50(self):
-        self._setup()
+        self._setup('pii')
 
     @irrelevant(context.library != "dotnet@2.50", reason="not relevant for other version")
     @bug(
         context.weblog_variant == "uds" and context.library == "dotnet@2.50.0", reason="APMRP-360",
     )  # bug with UDS protocol on this version
-    @missing_feature(context.library == 'ruby', reason='Local variable capture not implemented for method probes')
     def test_pii_redaction_dotnet_2_50(self):
         self._test(filter(["applicationkey", "connectionstring"]), REDACTED_TYPES)
 
     def setup_pii_redaction_line(self):
-        self._setup(probes_file='pii_line')
+        self._setup('pii_line')
         
     @irrelevant(context.library != 'ruby', reason='Ruby needs to use line probes to capture variables')
     def test_pii_redaction_line(self):
