@@ -132,13 +132,13 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
 
         self.weblog_responses = [weblog.get("/debugger/pii")]
 
-    def _test(self, redacted_keys, redacted_types):
+    def _test(self, redacted_keys, redacted_types, line_probe=False):
         self.assert_all_states_not_error()
         self.assert_all_probes_are_installed()
         self.assert_all_weblog_responses_ok()
 
-        self._validate_pii_keyword_redaction(redacted_keys)
-        self._validate_pii_type_redaction(redacted_types)
+        self._validate_pii_keyword_redaction(redacted_keys, line_probe=line_probe)
+        self._validate_pii_type_redaction(redacted_types, line_probe=line_probe)
 
     def setup_pii_redaction_full(self):
         self._setup('pii')
@@ -189,9 +189,9 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
         
     @irrelevant(context.library != 'ruby', reason='Ruby needs to use line probes to capture variables')
     def test_pii_redaction_line(self):
-        self._test(REDACTED_KEYS, REDACTED_TYPES)
+        self._test(REDACTED_KEYS, REDACTED_TYPES, True)
 
-    def _validate_pii_keyword_redaction(self, should_redact_field_names):
+    def _validate_pii_keyword_redaction(self, should_redact_field_names, line_probe=False):
         agent_logs_endpoint_requests = list(interfaces.agent.get_data(path_filters="/api/v2/logs"))
         not_redacted = []
         not_found = list(set(should_redact_field_names))
@@ -206,7 +206,10 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
                     if snapshot:
                         import pprint;pprint.pp(snapshot)
                         for field_name in should_redact_field_names:
-                            fields = snapshot["captures"]["return"]["locals"]["pii"]["fields"]
+                            if line_probe:
+                                fields = snapshot["captures"]["lines"]["33"]["locals"]["pii"]["fields"]
+                            else:
+                                fields = snapshot["captures"]["return"]["locals"]["pii"]["fields"]
 
                             if field_name in fields:
                                 not_found.remove(field_name)
@@ -225,7 +228,7 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
         if error_message != "":
             raise ValueError(error_message)
 
-    def _validate_pii_type_redaction(self, should_redact_types):
+    def _validate_pii_type_redaction(self, should_redact_types, line_probe=False):
         agent_logs_endpoint_requests = list(interfaces.agent.get_data(path_filters="/api/v2/logs"))
         not_redacted = []
 
@@ -238,7 +241,10 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
 
                     if snapshot:
                         for type_name in should_redact_types:
-                            type_info = snapshot["captures"]["return"]["locals"][type_name]
+                            if line_probe:
+                                type_info = snapshot["captures"]["lines"]["33"]["locals"][type_name]
+                            else:
+                                type_info = snapshot["captures"]["return"]["locals"][type_name]
 
                             if "fields" in type_info:
                                 not_redacted.append(type_name)
