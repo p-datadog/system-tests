@@ -14,6 +14,8 @@ class Test_Debugger_Probe_Statuses(base._Base_Debugger_Test):
     expected_status_map = {}
 
     def _setup(self, probes):
+        self.initialize_weblog_remote_config()
+        
         Test_Debugger_Probe_Statuses.version += 1
         self.rc_state = rc.send_debugger_command(probes=probes, version=Test_Debugger_Probe_Statuses.version)
 
