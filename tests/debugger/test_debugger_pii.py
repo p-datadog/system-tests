@@ -210,11 +210,17 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
                                 fields = snapshot["captures"]["lines"]["33"]["locals"]["pii"]["fields"]
                             else:
                                 fields = snapshot["captures"]["return"]["locals"]["pii"]["fields"]
+                                
+                            # Ruby prefixes instance variable names with @
+                            if context.library == 'ruby':
+                                check_field_name = '@' + field_name
+                            else:
+                                check_field_name = field_name
 
-                            if field_name in fields:
+                            if check_field_name in fields:
                                 not_found.remove(field_name)
 
-                                if "value" in fields[field_name]:
+                                if "value" in fields[check_field_name]:
                                     not_redacted.append(field_name)
         error_message = ""
         if not_redacted:
