@@ -149,7 +149,7 @@ class Test_Debugger_PII_Redaction(base._Base_Debugger_Test):
     @bug(context.library == "python@2.16.1", reason="DEBUG-3127")
     # Ruby requires @irrelevant rather than @missing_feature to skip setup
     # for this test (which will interfere with the line probe test).
-    @irrelevant(context.library == "ruby", reason="Local variable capture not implemented for method probes")
+    @irrelevant(library="ruby", reason="Local variable capture not implemented for method probes")
     def test_pii_redaction_full(self):
         self._test(REDACTED_KEYS, REDACTED_TYPES)
 
