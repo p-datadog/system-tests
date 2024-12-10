@@ -11,6 +11,8 @@ from utils import scenarios, interfaces, weblog, features, remote_config as rc, 
 @scenarios.debugger_method_probes_snapshot
 class Test_Debugger_Method_Probe_Snaphots(base._Base_Debugger_Test):
     def setup_log_method_probe_snaphots(self):
+        self.initialize_weblog_remote_config()
+
         probes = base.read_probes("probe_snapshot_log_method")
         self.expected_probe_ids = base.extract_probe_ids(probes)
         self.rc_state = rc.send_debugger_command(probes, version=1)
@@ -77,6 +79,8 @@ class Test_Debugger_Method_Probe_Snaphots(base._Base_Debugger_Test):
 @scenarios.debugger_line_probes_snapshot
 class Test_Debugger_Line_Probe_Snaphots(base._Base_Debugger_Test):
     def setup_log_line_probe_snaphots(self):
+        self.initialize_weblog_remote_config()
+
         probes = base.read_probes("probe_snapshot_log_line")
         self.expected_probe_ids = base.extract_probe_ids(probes)
         self.rc_state = rc.send_debugger_command(probes, version=1)
@@ -122,6 +126,8 @@ class Test_Debugger_Line_Probe_Snaphots(base._Base_Debugger_Test):
 @scenarios.debugger_mix_log_probe
 class Test_Debugger_Mix_Log_Probe(base._Base_Debugger_Test):
     def setup_mix_probe(self):
+        self.initialize_weblog_remote_config()
+
         probes = base.read_probes("probe_snapshot_log_mixed")
         self.expected_probe_ids = base.extract_probe_ids(probes)
         self.rc_state = rc.send_debugger_command(probes, version=1)
