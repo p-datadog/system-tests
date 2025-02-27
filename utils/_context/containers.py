@@ -286,6 +286,10 @@ class TestedContainer:
         """
 
         cmd = test
+        
+        if retries > 15:
+            print('reducing retries for %s from %s to 15' % (test,retries))
+            retries=15
 
         if not isinstance(cmd, str):
             assert cmd[0] == "CMD-SHELL", "Only CMD-SHELL is supported"
