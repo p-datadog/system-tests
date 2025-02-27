@@ -172,8 +172,8 @@ class TestedContainer:
         self._fix_host_pwd_in_volumes()
 
         logger.info(f"Start container {self.container_name}")
-        
-        print(self.environment)
+        print(f"Start container {self.container_name}")
+
         self._container = _get_client().containers.run(
             image=self.image.name,
             name=self.container_name,
@@ -184,10 +184,25 @@ class TestedContainer:
             network=network.name,
             **self.kwargs,
         )
+        print(f"container {self.container_name} started, waiting for health")
 
         self.healthy = self.wait_for_health()
         if self.healthy:
+            print(f"container {self.container_name} healthy")
             self.warmup()
+        else:
+            print(f"container {self.container_name} not healthy")
+            args=dict(
+                image=self.image.name,
+                name=self.container_name,
+                hostname=self.name,
+                environment=self.environment,
+                # auto_remove=True,
+                detach=True,
+                network=network.name,
+                **self.kwargs,
+            )
+            print('container arguments: ', args)
 
         self._container.reload()
         # with open(f"{self.log_folder_path}/container.json", "w", encoding="utf-8") as f:
@@ -233,7 +248,9 @@ class TestedContainer:
         """Start all dependencies of a container and then start the container"""
         threads = [dependency.async_start_recursive(network) for dependency in self.depends_on]
 
+        print("%s: depends on %s" % (self, threads))
         for thread in threads:
+            print("%s: waiting for %s" % (self, thread))
             thread.join()
 
         for dependency in self.depends_on:
