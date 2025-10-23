@@ -113,9 +113,13 @@ def send_state(
 
     StaticJsonMockedResponse(path="/v0.7/config", mocked_json=raw_payload).send()
 
-    library.wait_for(remote_config_applied, timeout=30)
-    # ensure the library has enough time to apply the config to all subprocesses
-    time.sleep(2)
+    logger.debug('Waiting for remote config to be applied')
+    timeout = 30 if os.getenv('CI') else 10
+    rv = library.wait_for(remote_config_applied, timeout=timeout)
+    assert rv, 'Remote config was not applied'
+    if context.library == 'python':
+        # ensure the library has enough time to apply the config to all subprocesses
+        time.sleep(2)
 
     return current_states
 
